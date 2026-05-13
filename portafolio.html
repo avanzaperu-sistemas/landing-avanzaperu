@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portafolio - Avanza Perú</title>
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Inter', sans-serif; }
+        .bg-overlay { background: rgba(0, 0, 0, 0.5); }
+        .red-gradient { background: linear-gradient(90deg, #C4271B 0%, #E32E22 100%); }
+
+        img.logo-footer { width: 300px; height: auto; }
+
+        .mobile-menu { transition: transform 0.3s ease-in-out; }
+        .mobile-menu.hidden { transform: translateX(100%); }
+        
+        .back-to-top {
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        .back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .gallery-masonry {
+            column-count: 1;
+            column-gap: 16px;
+        }
+        @media (min-width: 640px) {
+            .gallery-masonry { column-count: 2; }
+        }
+        @media (min-width: 1024px) {
+            .gallery-masonry { column-count: 3; }
+        }
+        .gallery-item {
+            break-inside: avoid;
+            margin-bottom: 16px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+            cursor: pointer;
+        }
+        .gallery-item img {
+            width: 100%;
+            display: block;
+            transition: transform 0.5s ease;
+        }
+        .gallery-item:hover img {
+            transform: scale(1.08);
+        }
+        .gallery-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 60%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            display: flex;
+            align-items: flex-end;
+            padding: 24px;
+        }
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
+
+        .filter-btn.active {
+            background-color: #C4271B;
+            color: white;
+        }
+    </style>
+</head>
+<body class="bg-white text-slate-800">
+
+    <header class="fixed w-full z-50 bg-white/95 backdrop-blur-sm shadow-sm">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center">
+                <a href="index.html">
+                    <img src="images/logo_avanza_p.svg" alt="Avanza Perú" class="h-10 md:h-12 logo-header" onerror="this.src='https://placehold.co/180x50/white/C4271B?text=AVANZA+PERU'">
+                </a>
+            </div>
+            
+            <nav class="hidden md:flex space-x-8 text-sm font-semibold uppercase tracking-wider text-slate-600">
+                <a href="index.html#inicio" class="hover:text-red-600 transition">Inicio</a>
+                <a href="index.html#servicios" class="hover:text-red-600 transition">Servicios</a>
+                <a href="index.html#galeria" class="hover:text-red-600 transition">Galería</a>
+                <a href="index.html#contacto" class="hover:text-red-600 transition">Contacto</a>
+            </nav>
+
+            <div class="flex items-center space-x-4">
+                <a href="tel:984420841" class="hidden lg:flex items-center bg-red-600 text-white px-5 py-2 rounded-full font-bold text-sm hover:bg-red-700 transition">
+                    <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path></svg>
+                    Llámanos al: 984 420 841
+                </a>
+                <button id="menu-toggle" class="md:hidden text-slate-800 p-2">
+                    <svg id="menu-icon" class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                    <svg id="close-icon" class="w-8 h-8 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="mobile-menu hidden md:hidden fixed top-[68px] right-0 w-full bg-white shadow-lg py-4 z-40">
+            <nav class="flex flex-col space-y-4 px-4">
+                <a href="index.html#inicio" class="text-slate-800 font-semibold py-2 border-b border-slate-100">Inicio</a>
+                <a href="index.html#servicios" class="text-slate-600 font-semibold py-2 border-b border-slate-100">Servicios</a>
+                <a href="index.html#galeria" class="text-slate-600 font-semibold py-2 border-b border-slate-100">Galería</a>
+                <a href="index.html#contacto" class="text-slate-600 font-semibold py-2 border-b border-slate-100">Contacto</a>
+                <a href="tel:984420841" class="bg-red-600 text-white text-center py-3 rounded-lg font-bold">Llamar: 984 420 841</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="pt-32 pb-16 bg-slate-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h1 class="text-4xl md:text-5xl font-extrabold mb-4 text-slate-800">Nuestro Portafolio</h1>
+                <p class="text-slate-600 text-lg max-w-2xl mx-auto">
+                    Explora nuestra colección de proyectos de branding, señalética y publicidad de gran formato.
+                </p>
+            </div>
+
+            <div class="flex flex-wrap justify-center gap-4 mb-12">
+                <button class="filter-btn active px-6 py-2 rounded-full border border-slate-300 text-sm font-semibold transition bg-white text-slate-700 hover:bg-slate-100" data-filter="all">Todos</button>
+                <button class="filter-btn px-6 py-2 rounded-full border border-slate-300 text-sm font-semibold transition bg-white text-slate-700 hover:bg-slate-100" data-filter="fachada">Fachadas</button>
+                <button class="filter-btn px-6 py-2 rounded-full border border-slate-300 text-sm font-semibold transition bg-white text-slate-700 hover:bg-slate-100" data-filter="valla">Vallas</button>
+                <button class="filter-btn px-6 py-2 rounded-full border border-slate-300 text-sm font-semibold transition bg-white text-slate-700 hover:bg-slate-100" data-filter="stand">Stands</button>
+                <button class="filter-btn px-6 py-2 rounded-full border border-slate-300 text-sm font-semibold transition bg-white text-slate-700 hover:bg-slate-100" data-filter="banner">Banners</button>
+            </div>
+
+            <div class="gallery-masonry" id="gallery">
+                <div class="gallery-item" data-category="fachada">
+                    <img src="https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=600&q=80" alt="Proyecto">
+                    <div class="gallery-overlay">
+                        <div>
+                            <span class="text-red-500 text-xs font-bold uppercase">Fachada</span>
+                            <p class="text-white font-semibold text-lg">Fachada Comercial</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="gallery-item" data-category="valla">
+                    <img src="https://images.unsplash.com/photo-1554469384-e58fac16e23a?auto=format&fit=crop&w=600&q=80" alt="Proyecto">
+                    <div class="gallery-overlay">
+                        <div>
+                            <span class="text-red-500 text-xs font-bold uppercase">Valla</span>
+                            <p class="text-white font-semibold text-lg">Valla Publicitaria</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="gallery-item" data-category="stand">
+                    <img src="https://images.unsplash.com/photo-1531058020387-3be344556be6?auto=format&fit=crop&w=600&q=80" alt="Proyecto">
+                    <div class="gallery-overlay">
+                        <div>
+                            <span class="text-red-500 text-xs font-bold uppercase">Stand</span>
+                            <p class="text-white font-semibold text-lg">Stand Ferial</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="gallery-item" data-category="banner">
+                    <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=600&q=80" alt="Proyecto">
+                    <div class="gallery-overlay">
+                        <div>
+                            <span class="text-red-500 text-xs font-bold uppercase">Banner</span>
+                            <p class="text-white font-semibold text-lg">Banner Gigante</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="gallery-item" data-category="fachada">
+                    <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=600&q=80" alt="Proyecto">
+                    <div class="gallery-overlay">
+                        <div>
+                            <span class="text-red-500 text-xs font-bold uppercase">Fachada</span>
+                            <p class="text-white font-semibold text-lg">Fachada de Local</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="gallery-item" data-category="valla">
+                    <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=600&q=80" alt="Proyecto">
+                    <div class="gallery-overlay">
+                        <div>
+                            <span class="text-red-500 text-xs font-bold uppercase">Valla</span>
+                            <p class="text-white font-semibold text-lg">Letrero Luminoso</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="gallery-item" data-category="stand">
+                    <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=600&q=80" alt="Proyecto">
+                    <div class="gallery-overlay">
+                        <div>
+                            <span class="text-red-500 text-xs font-bold uppercase">Stand</span>
+                            <p class="text-white font-semibold text-lg">Stand Promocional</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="gallery-item" data-category="banner">
+                    <img src="https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=600&q=80" alt="Proyecto">
+                    <div class="gallery-overlay">
+                        <div>
+                            <span class="text-red-500 text-xs font-bold uppercase">Banner</span>
+                            <p class="text-white font-semibold text-lg">Lona Backlight</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="gallery-item" data-category="fachada">
+                    <img src="https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=600&q=80" alt="Proyecto">
+                    <div class="gallery-overlay">
+                        <div>
+                            <span class="text-red-500 text-xs font-bold uppercase">Fachada</span>
+                            <p class="text-white font-semibold text-lg">Fachada Corporativa</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="gallery-item" data-category="valla">
+                    <img src="https://images.unsplash.com/photo-1603570388466-b53d5d7d2137?auto=format&fit=crop&w=600&q=80" alt="Proyecto">
+                    <div class="gallery-overlay">
+                        <div>
+                            <span class="text-red-500 text-xs font-bold uppercase">Valla</span>
+                            <p class="text-white font-semibold text-lg">Panel Advertising</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="gallery-item" data-category="stand">
+                    <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=600&q=80" alt="Proyecto">
+                    <div class="gallery-overlay">
+                        <div>
+                            <span class="text-red-500 text-xs font-bold uppercase">Stand</span>
+                            <p class="text-white font-semibold text-lg">Stand Ferias</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="gallery-item" data-category="banner">
+                    <img src="https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&w=600&q=80" alt="Proyecto">
+                    <div class="gallery-overlay">
+                        <div>
+                            <span class="text-red-500 text-xs font-bold uppercase">Banner</span>
+                            <p class="text-white font-semibold text-lg">Banner Colgante</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-2xl font-bold mb-4 text-slate-800">¿Tienes un proyecto en mente?</h2>
+            <p class="text-slate-600 mb-8">Contáctanos y te asesoramos con la mejor solución</p>
+            <a href="index.html#contacto" class="inline-block bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-lg font-bold transition">
+                Solicitar Cotización
+            </a>
+        </div>
+    </section>
+
+    <footer class="bg-[#0D1117] text-slate-400 py-16">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-12 mb-12">
+                <div class="col-span-1 md:col-span-1">
+                    <a href="index.html">
+                        <img src="images/logo_avanza_peru_footer.svg" alt="Avanza Perú" class="h-10 mb-6 logo-footer" onerror="this.src='https://placehold.co/180x50/0D1117/white?text=AVANZA+PERU'">
+                    </a>
+                    <p class="text-sm leading-relaxed">
+                        Expertos en soluciones gráficas de gran impacto visual. Transformamos espacios y potenciamos marcas en todo el territorio nacional.
+                    </p>
+                </div>
+                
+                <div>
+                    <h4 class="text-white font-bold mb-6">Quick Links</h4>
+                    <ul class="space-y-4 text-sm">
+                        <li><a href="index.html#inicio" class="hover:text-red-500 transition">Inicio</a></li>
+                        <li><a href="index.html#galeria" class="hover:text-red-500 transition">Galería</a></li>
+                        <li><a href="index.html#contacto" class="hover:text-red-500 transition">Precios</a></li>
+                        <li><a href="#" class="hover:text-red-500 transition">Privacidad</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold mb-6">Servicios</h4>
+                    <ul class="space-y-4 text-sm">
+                        <li><a href="#" class="hover:text-red-500 transition">Gigantografías</a></li>
+                        <li><a href="#" class="hover:text-red-500 transition">Señalética</a></li>
+                        <li><a href="#" class="hover:text-red-500 transition">Fachadas</a></li>
+                        <li><a href="#" class="hover:text-red-500 transition">Viniles</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold mb-6">Síguenos</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center hover:bg-red-600 transition">
+                            <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-2.21c0-.837.474-1.29 1.17-1.29H15V0h-3.415C9.362 0 8 1.488 8 4v4H9z"></path></svg>
+                        </a>
+                        <a href="#" class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center hover:bg-red-600 transition">
+                            <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4s1.791-4 4-4 4 1.79 4 4-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"></path></svg>
+                        </a>
+                        <a href="#" class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center hover:bg-red-600 transition">
+                            <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"></path></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pt-8 border-t border-slate-800 text-center text-xs">
+                <p>&copy; 2026 Avanza Perú. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <button id="back-to-top" class="back-to-top fixed bottom-8 right-8 bg-red-600 text-white w-12 h-12 rounded-full shadow-lg flex items-center justify-center hover:bg-red-700 transition z-50">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path></svg>
+    </button>
+
+    <script>
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                const filter = this.dataset.filter;
+                document.querySelectorAll('.gallery-item').forEach(item => {
+                    if (filter === 'all' || item.dataset.category === filter) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.classList.add('shadow-md');
+            } else {
+                header.classList.remove('shadow-md');
+            }
+
+            const backToTop = document.getElementById('back-to-top');
+            if (window.scrollY > 300) {
+                backToTop.classList.add('show');
+            } else {
+                backToTop.classList.remove('show');
+            }
+        });
+
+        const menuToggle = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const menuIcon = document.getElementById('menu-icon');
+        const closeIcon = document.getElementById('close-icon');
+
+        if (menuToggle && mobileMenu) {
+            menuToggle.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+                menuIcon.classList.toggle('hidden');
+                closeIcon.classList.toggle('hidden');
+            });
+
+            document.querySelectorAll('#mobile-menu a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                    menuIcon.classList.remove('hidden');
+                    closeIcon.classList.add('hidden');
+                });
+            });
+        }
+
+        document.getElementById('back-to-top').addEventListener('click', function(e) {
+            e.preventDefault();
+            const startPosition = window.pageYOffset;
+            const distance = -startPosition;
+            const duration = 1200;
+            let startTime = null;
+
+            function animation(currentTime) {
+                if (startTime === null) startTime = currentTime;
+                const timeElapsed = currentTime - startTime;
+                const run = ease(timeElapsed, startPosition, distance, duration);
+                window.scrollTo(0, run);
+                if (timeElapsed < duration) requestAnimationFrame(animation);
+            }
+
+            function ease(t, b, c, d) {
+                t /= d / 2;
+                if (t < 1) return c / 2 * t * t + b;
+                t--;
+                return -c / 2 * (t * (t - 2) - 1) + b;
+            }
+
+            requestAnimationFrame(animation);
+        });
+    </script>
+</body>
+</html>
